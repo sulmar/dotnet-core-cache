@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
+using dotnet_core_cache.Extensions;
 
 namespace dotnet_core_cache.Controllers
 {
@@ -36,30 +34,21 @@ namespace dotnet_core_cache.Controllers
                 _distributedCache.SetString(cacheKey, existingTime);
                 return Ok("Added to cache : " + existingTime);
             }
-
-            //var customers = customerRepository.Get();
-
-            //return Ok(customers);
         }
 
         [HttpGet("{id:int}")]
         public IActionResult Get(int id)
         {
+            var cachedCustomer = _distributedCache.Get<Customer>($"customers-{id}");
 
-            var cached = _distributedCache.GetString($"customers-{id}");
-
-            if (cached!=null)
+            if (cachedCustomer != null)
             {
-                var cachedCustomer = JsonSerializer.Deserialize<Customer>(cached);
-
                 return Ok(cachedCustomer);
             }
 
             var customer = customerRepository.Get(id);
 
-            string json = JsonSerializer.Serialize<Customer>(customer);
-
-            _distributedCache.SetString($"customers-{id}", json);
+            _distributedCache.Set($"customers-{id}", customer);
 
             return Ok(customer);
         }
