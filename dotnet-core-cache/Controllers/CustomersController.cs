@@ -43,7 +43,6 @@ namespace dotnet_core_cache.Controllers
         }
 
         [HttpGet("{id:int}")]
-        [ResponseCache(Duration = 100, VaryByQueryKeys = new [] { "*" })]
         public IActionResult Get(int id)
         {
 
