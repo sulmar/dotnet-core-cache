@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  dotnet-core-cache:
+    image: ${DOCKER_REGISTRY-}dotnetcorecache
+    depends_on:
+        - "my_cache"
+    build:
+      context: .
+      dockerfile: dotnet-core-cache/Dockerfile
+    links:
+         - "my_cache"
+   
+      
+  my_cache:
+    image: redis:alpine
+    container_name: my_cache
+
