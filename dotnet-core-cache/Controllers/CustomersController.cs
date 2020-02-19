@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
-using System.Text.Json;
 using dotnet_core_cache.Extensions;
 
 namespace dotnet_core_cache.Controllers
@@ -26,13 +25,13 @@ namespace dotnet_core_cache.Controllers
             var existingTime = _distributedCache.GetString(cacheKey);
             if (!string.IsNullOrEmpty(existingTime))
             {
-                return Ok("Fetched from cache : " + existingTime);
+                return Ok($"Fetched from cache : {existingTime}");
             }
             else
             {
                 existingTime = DateTime.UtcNow.ToString();
                 _distributedCache.SetString(cacheKey, existingTime);
-                return Ok("Added to cache : " + existingTime);
+                return Ok($"Added to cache : {existingTime}");
             }
         }
 
