@@ -33,6 +33,9 @@ namespace dotnet_core_cache
 
             services.AddResponseCaching();
 
+            //Add services needed for sessions
+            services.AddSession();
+
             services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = "my_cache:6379";
@@ -58,6 +61,9 @@ namespace dotnet_core_cache
             app.UseAuthorization();
 
             app.UseResponseCaching();
+
+            //Enable sessions
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
